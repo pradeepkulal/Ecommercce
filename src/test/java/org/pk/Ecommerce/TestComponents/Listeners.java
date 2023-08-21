@@ -18,9 +18,11 @@ import com.aventstack.extentreports.reporter.ExtentReporter;
 public class Listeners extends BaseTest implements ITestListener {
 	ExtentTest test;
 	ExtentReports extent= ExtentReporterNG.getReporterObject();
+	ThreadLocal<ExtentTest> extentTest= new ThreadLocal<ExtentTest>();
 	@Override
 	public void onTestStart(ITestResult result) {
 		test= extent.createTest(result.getMethod().getMethodName());
+		extentTest.set(test);
 	}
 	@Override
 	public void onTestSuccess(ITestResult result) {
@@ -28,7 +30,7 @@ public class Listeners extends BaseTest implements ITestListener {
 	}
 	@Override
 	public void onTestFailure(ITestResult result) {
-		test.fail(result.getThrowable());
+	extentTest.get().fail(result.getThrowable());
 		try {
 			driver= (WebDriver) result.getTestClass().getRealClass().getField("driver").get(result.getInstance());
 		} catch (Exception e1) {
@@ -42,7 +44,7 @@ public class Listeners extends BaseTest implements ITestListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		test.addScreenCaptureFromPath(dest,result.getMethod().getMethodName());
+		extentTest.get().addScreenCaptureFromPath(dest,result.getMethod().getMethodName());
 		
 	}
 	@Override

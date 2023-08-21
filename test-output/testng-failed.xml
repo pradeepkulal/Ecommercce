@@ -21,6 +21,7 @@
       <class name="org.pk.Ecommerce.Test.ErrorValidations">
         <methods>
           <include name="tearDown"/>
+          <include name="loginErrorValidation"/>
           <include name="launchApplication"/>
           <include name="submitOrder"/>
         </methods>
